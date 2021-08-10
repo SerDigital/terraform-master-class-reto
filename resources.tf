@@ -77,7 +77,7 @@ resource "aws_subnet" "public_b" {
 }
 
 resource "aws_subnet" "public_c" {
-  vpc_id = aws_vpc.main.id
+  vpc_id            = aws_vpc.main.id
   cidr_block        = "10.0.3.0/24"
   availability_zone = "us-east-1c"
 
@@ -88,7 +88,7 @@ resource "aws_subnet" "public_c" {
 
 #Elastic LoadBalancer
 resource "aws_lb" "alb" {
-  name               = "LoadBalancer"
+  name               = "terraform-master-class"
   internal           = false
   load_balancer_type = "application"
   #security_groups    = [aws_security_group.lb_sg.id]
@@ -96,10 +96,22 @@ resource "aws_lb" "alb" {
     subnet_id = aws_subnet.public_a.id
   }
 
-  enable_deletion_protection = true
+  subnet_mapping {
+    subnet_id = aws_subnet.public_b.id
+  }
+
+  subnet_mapping {
+    subnet_id = aws_subnet.public_c.id
+  }
+
+  #enable_deletion_protection = true
 
   tags = {
-    Environment = "production"
+    Environment = "Terraform Reto"
   }
 }
+
+
+
+
 
